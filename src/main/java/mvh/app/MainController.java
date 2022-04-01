@@ -168,6 +168,14 @@ public class MainController {
 
     }
     @FXML
+    void about_mvh_map(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("Message");
+        alert.setTitle("About");
+        alert.setContentText("Author: DEEPSHIKHA DHAMMI"+"\n"+"UCID: 30140157"+"\n"+"Tutorial: 08"+"\n"+"TA: KIMIYA SADAT"+"\n"+"email: deepshikha.dhammi@ucalgary.ca"+"\n"+"Version: v1.o"+"\n"+"This is a world editor for Monster VS Heroes");
+        alert.show();
+    }
+    @FXML
     void create_world(MouseEvent event) {
         try {
             int rows = Integer.parseInt(row_input.getText());
