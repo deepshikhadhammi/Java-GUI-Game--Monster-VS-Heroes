@@ -26,6 +26,7 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Main.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
         //Students edit here to set up the scene
+        stage.setTitle("Monster versus Heroes World Editor v1.0");
         stage.setScene(scene);
         stage.show();
     }
