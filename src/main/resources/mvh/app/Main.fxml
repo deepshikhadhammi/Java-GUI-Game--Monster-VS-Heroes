@@ -28,18 +28,11 @@
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="New" />
-                        <MenuItem mnemonicParsing="false" text="Open…" />
-                        <Menu mnemonicParsing="false" text="Open Recent" />
+                        <MenuItem fx:id="load" mnemonicParsing="false" onAction="#handle_load_action" text="Load" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Close" />
-                        <MenuItem mnemonicParsing="false" text="Save" />
-                        <MenuItem mnemonicParsing="false" text="Save As…" />
-                        <MenuItem mnemonicParsing="false" text="Revert" />
+                        <MenuItem fx:id="save" mnemonicParsing="false" onAction="#handle_save_action" text="Save" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Preferences…" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Quit" />
+                        <MenuItem fx:id="quit" mnemonicParsing="false" onAction="#handle_quit_action" text="Quit" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
@@ -97,7 +90,7 @@
                         <ToggleGroup fx:id="entity" />
                      </toggleGroup>
                   </RadioButton>
-                  <Label layoutX="28.0" layoutY="258.0" text="HERO">
+                  <Label layoutX="37.0" layoutY="255.0" text="HERO">
                      <font>
                         <Font name="Copperplate Gothic Bold" size="18.0" />
                      </font>
@@ -115,6 +108,26 @@
                   <TextField fx:id="hero_column_textfield" layoutX="181.0" layoutY="343.0" prefHeight="25.0" prefWidth="28.0" />
                   <Label layoutX="179.0" layoutY="318.0" text="Column" />
                   <RadioButton fx:id="hero_rb" layoutX="129.0" layoutY="377.0" mnemonicParsing="false" onMouseClicked="#RadioSelect" text="Add Hero" toggleGroup="$entity" />
+                  <Label layoutX="26.0" layoutY="409.0" text="DELETE">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="35.0" layoutY="439.0" text="Row" />
+                  <Label layoutX="77.0" layoutY="439.0" text="Column" />
+                  <TextField fx:id="row_location" layoutX="29.0" layoutY="456.0" prefHeight="25.0" prefWidth="34.0" />
+                  <TextField fx:id="col_location" layoutX="77.0" layoutY="456.0" prefHeight="25.0" prefWidth="35.0" />
+                  <Button fx:id="delete" layoutX="146.0" layoutY="456.0" mnemonicParsing="false" onMouseClicked="#delete_entity" text="Delete" />
+                  <Label layoutX="11.0" layoutY="493.0" text="VIEW DETAIL">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="39.0" layoutY="513.0" text="Row" />
+                  <Label layoutX="82.0" layoutY="513.0" text="Column" />
+                  <TextField fx:id="view_row_textfield" layoutX="31.0" layoutY="530.0" prefHeight="25.0" prefWidth="34.0" />
+                  <TextField fx:id="view_column_textfield" layoutX="88.0" layoutY="529.0" prefHeight="25.0" prefWidth="35.0" />
+                  <Button fx:id="details" layoutX="146.0" layoutY="529.0" mnemonicParsing="false" onMouseClicked="#view_entity_detail" text="View Detail" />
                     </children>
                 </AnchorPane>
                 <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
@@ -122,7 +135,11 @@
                         <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="341.0">
                             <children>
                                 <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="World View" textAlignment="CENTER" wrapText="false" />
-                        <TextArea fx:id="world_view" layoutX="102.0" layoutY="41.0" prefHeight="200.0" prefWidth="200.0" />
+                        <TextArea fx:id="world_view" layoutX="102.0" layoutY="41.0" prefHeight="200.0" prefWidth="200.0">
+                           <font>
+                              <Font name="Monospaced Regular" size="12.0" />
+                           </font>
+                        </TextArea>
                             </children>
                         </AnchorPane>
                     </content>
@@ -130,13 +147,14 @@
                 <AnchorPane>
                     <children>
                         <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" wrapText="false" />
+                  <TextArea fx:id="details_view" layoutX="21.0" layoutY="44.0" prefHeight="200.0" prefWidth="200.0" />
                     </children>
                 </AnchorPane>
             </items>
         </SplitPane>
         <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
             <children>
-                <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
+                <Label fx:id="left_status" maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
                     <font>
                         <Font size="11.0" fx:id="x3" />
                     </font>

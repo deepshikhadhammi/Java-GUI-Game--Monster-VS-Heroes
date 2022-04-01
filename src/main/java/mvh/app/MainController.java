@@ -1,10 +1,20 @@
 package mvh.app;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import mvh.enums.WeaponType;
 import mvh.world.*;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import static mvh.util.Reader.loadWorld;
 
 public class MainController {
 
@@ -61,7 +71,24 @@ public class MainController {
 
     @FXML
     private TextField hero_weapon_textfield;
+    @FXML
+    private Button delete;
+    @FXML
+    private TextField row_location;
+    @FXML
+    private TextField column_location;
+    @FXML
+    private Button details;
+    @FXML
+    private TextArea details_view;
+    @FXML
+    private TextField view_column_textfield;
 
+    @FXML
+    private TextField view_row_textfield;
+    @FXML
+    private Label left_status;
+    FileChooser fileChooser=new FileChooser();
 
 
     /**
@@ -70,6 +97,75 @@ public class MainController {
     @FXML
     public void initialize() {
         choose_weapon.getItems().addAll(weapon);
+    }
+
+    @FXML
+    void handle_load_action(ActionEvent event) {
+        fileChooser.setTitle("Open File Dialog");
+        File file = fileChooser.showOpenDialog(new Stage());
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        if (file != null) {
+            world = loadWorld(file);
+            assert world != null;
+            world_view.setText(world.toString());
+        }
+        else
+        {
+            left_status.setText("Choose a file to read!");
+        }
+
+    }
+
+    @FXML
+    void handle_quit_action(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handle_save_action(ActionEvent event) {
+        File file= fileChooser.showSaveDialog(new Stage());
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        if(file!=null) {
+            try {
+                FileWriter file_writer = new FileWriter(file);
+                PrintWriter print_writer = new PrintWriter(file_writer);
+                String rows = row_input.getText();
+                String columns = column_input.getText();
+                print_writer.println(rows);
+                print_writer.println(columns);
+                for (int r = 0, i = 0; i < Integer.parseInt(rows) * Integer.parseInt(columns) && r < Integer.parseInt(rows); i++, r++) {
+                    for (int c = 0; c < Integer.parseInt(columns); c++) {
+                        if (world.isHero(r, c)) {
+                            print_writer.println(String.valueOf(r) + ',' + String.valueOf(c) + ',' + "HERO" + ',' + String.valueOf(world.getEntity(r, c).getSymbol()) + ',' + String.valueOf(world.getEntity(r, c).getHealth()) + ',' + String.valueOf(world.getEntity(r, c).weaponStrength()) + ',' + String.valueOf(world.getEntity(r, c).armorStrength()));
+                        } else if (world.isMonster(r, c)) {
+                            String w = "";
+                            if (world.getEntity(r, c).weaponStrength() == 2) {
+                                w = "C";
+                            } else if (world.getEntity(r, c).weaponStrength() == 3) {
+                                w = "A";
+                            } else if (world.getEntity(r, c).weaponStrength() == 4) {
+                                w = "S";
+                            }
+                            print_writer.println(String.valueOf(r) + ',' + String.valueOf(c) + ',' + "MONSTER" + ',' + String.valueOf(world.getEntity(r, c).getSymbol()) + ',' + String.valueOf(world.getEntity(r, c).getHealth()) + ',' + w);
+                        } else if (world.getEntity(r, c) == null) {
+                            print_writer.println(String.valueOf(r) + ',' + String.valueOf(c));
+                        }
+                    }
+                }
+                print_writer.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            left_status.setText("Choose a file to save into!");
+        }
+
     }
     @FXML
     void create_world(MouseEvent event) {
@@ -114,7 +210,7 @@ public class MainController {
                     {
                         left_status.setText("Select Monster's weapon");
                     }
-                    if (!monster_symbol_textfield.getText().isEmpty() && !monster_health_textfield.getText().isEmpty() && !row_location.getText().isEmpty() && !column_location.getText().isEmpty()&& choose_weapon.getValue()!=null) {
+                    if (!monster_symbol_textfield.getText().isEmpty() && !monster_health_textfield.getText().isEmpty() && !monster_row_textfield.getText().isEmpty() && !monster_column_textfield.getText().isEmpty()&& choose_weapon.getValue()!=null) {
                         char mon_symbol = monster_symbol_textfield.getText().charAt(0);
                         int mon_health = Integer.parseInt(monster_health_textfield.getText());
                         int mon_row = Integer.parseInt(monster_row_textfield.getText());
@@ -197,6 +293,98 @@ public class MainController {
         }
 
     }
+    @FXML
+    void delete_entity(MouseEvent event) {
+        try {
+            if (world == null) {
+                left_status.setText("Create a world by entering rows and columns and then click create world button");
+            }
+            else {
+                if (row_location.getText().isEmpty()) {
+                    left_status.setText("Enter row index to delete an entity!");
+                }
+
+                if (column_location.getText().isEmpty()) {
+                    left_status.setText("Enter column index to delete an entity!");
+                }
+                if (!row_location.getText().isEmpty() && !column_location.getText().isEmpty()) {
+                    if (Integer.parseInt(row_location.getText()) >= 0 && Integer.parseInt(row_location.getText()) < Integer.parseInt(row_input.getText()) && Integer.parseInt(column_location.getText()) >= 0 && Integer.parseInt(column_location.getText()) < Integer.parseInt(column_input.getText()))
+                    {
+                        int row = Integer.parseInt(row_location.getText());
+                        int column = Integer.parseInt(column_location.getText());
+                        world.addEntity(row, column, null);
+                        left_status.setText("Deleted an entity!");
+                        world_view.setText(world.toString());
+                    }
+
+                    else if (Integer.parseInt(row_location.getText()) < 0 || Integer.parseInt(row_location.getText()) >= Integer.parseInt(row_input.getText())) {
+                        left_status.setText("Enter row index within a valid range!");
+                    }
+                    else if (Integer.parseInt(column_location.getText()) < 0 || Integer.parseInt(column_location.getText()) >= Integer.parseInt(column_input.getText())) {
+                        left_status.setText("Enter column index within a valid range");
+                    }
+                }
+            }
+
+
+        } catch (NumberFormatException e) {
+            left_status.setText("Enter a valid integer input! "+" "+e);
+        }
+    }
+    @FXML
+    void view_entity_detail(MouseEvent event) {
+        try
+        {
+        if(view_row_textfield.getText().isEmpty())
+        {
+            left_status.setText("Enter the row index of an entity to view details!");
+        }
+        if(view_column_textfield.getText().isEmpty())
+        {
+            left_status.setText("Enter the column index of an entity to view details!");
+        }
+
+        int row= Integer.parseInt(view_row_textfield.getText());
+        int column= Integer.parseInt(view_column_textfield.getText());
+        world.getEntity(row,column);
+        if(world.isMonster(row,column)) {
+            String type = "MONSTER";
+            char symbol = world.getEntity(row, column).getSymbol();
+            int health=world.getEntity(row,column).getHealth();
+            int weapon_strength=world.getEntity(row,column).weaponStrength();
+            String weapon="";
+            if(weapon_strength==4)
+            {
+                weapon="SWORD";
+
+            }
+            else if(weapon_strength==3)
+            {
+                weapon="AXE";
+            }
+            else if(weapon_strength==2)
+            {
+                weapon="CLUB";
+            }
+            details_view.setText("Type: " + type + "\n" +"Symbol: "+ symbol+"\n"+"Health: "+ health+"\n"+"Weapon: "+ weapon+"\n"+"Weapon strength: "+ weapon_strength);
+        }
+        else if(world.isHero(row,column))
+        {
+            String type = "HERO";
+            char symbol = world.getEntity(row, column).getSymbol();
+            int health=world.getEntity(row,column).getHealth();
+            int weapon=world.getEntity(row,column).weaponStrength();
+            int armor=world.getEntity(row,column).armorStrength();
+            details_view.setText("Type: " + type + "\n" +"Symbol: "+ symbol+"\n"+"Health: "+ health+"\n"+"Weapon Strength: "+weapon+"\n"+"Armor Strength: "+armor);
+        }
+    }
+        catch(NumberFormatException e)
+        {
+            left_status.setText("Enter a valid integer input! "+" '+e");
+        }
+}
+
+
 
 
 }

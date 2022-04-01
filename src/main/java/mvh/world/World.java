@@ -1,6 +1,7 @@
 package mvh.world;
 
 import mvh.enums.Direction;
+import mvh.enums.Symbol;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -219,5 +220,45 @@ public class World {
     public int getColumns() {
         return world[0].length;
     }
+    /** creating a map consisting of entities,walls and floors
+     * @return string that contains a map
+     */
+
+    public String worldString()
+    {
+        String str = "";
+        String str1 = "";
+        for (int k = 0; k <= getColumns() + 1; k++) {     //loop to add walls before first and after last row
+            str1 = str1 + Symbol.WALL.getSymbol();
+        }
+        str = str + str1 + "\n";
+        for (int i = 0; i < getRows(); i++) {             //looping through entities
+            for (int j = 0; j < getColumns(); j++) {
+                if (j == 0) {                              //adding a wall before the first column in every row
+                    str = str + Symbol.WALL.getSymbol();
+                }
+                if (getEntity(i, j) == null) {
+                    str = str + Symbol.FLOOR.getSymbol();   //if entity null add floor
+                } else if (getEntity(i, j) != null) {     //if entity is not null
+                    if(getEntity(i,j).isAlive())         //if entity alive
+                        str = str + world[i][j].getSymbol();    //Add symbol of entity
+                    else
+                        str=str+Symbol.DEAD.getSymbol();    //If entity dead add dead symbol
+                }
+                if ((j + 1) == getColumns()) {
+                    str = str + Symbol.WALL.getSymbol();     //adding wall at the end of every column
+                }
+            }
+            str = str + "\n";
+        }
+        str = str + str1;
+        return str;              //return the string that contains worldstring() and information about entities
+    }
+    @Override
+    public String toString() {
+        return worldString();
+    }
 
 }
+
+
