@@ -4,8 +4,6 @@ DATE: APRIL 1, 2022
 Tutorial: T08_
 
 
-
-
 **CREATING A WORLD:**
 
 There are two text fields. One is for  _row input_ and the other for _column input_. For creating a world user should enter the row and column value and then mouse click on _Create World_ button.
@@ -39,4 +37,9 @@ For viewing details of an Entity user should enter the row and column index o th
 2. HELP
   a) About: On selecting about menu item an alert message dialog box will appear that will gic=ve the details about the author, tutorial,TA, email and version.
   
+**RUN JAR FILE**
+In order to run a jar file user should open cmd and then enter the module path and add modules.
+ For example:
+java --module-path "C:\Program Files\Java\javafx-sdk-17.0.2\lib" --add-modules
+javafx.controls,javafx.fxml -jar Assignment3CPSC233W22.jar
   
