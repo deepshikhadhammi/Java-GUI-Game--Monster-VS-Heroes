@@ -87,6 +87,8 @@ public class MainController {
     @FXML
     private TextField view_row_textfield;
     @FXML
+    private Label right_status;
+    @FXML
     private Label left_status;
     FileChooser fileChooser=new FileChooser();
 
@@ -120,6 +122,7 @@ public class MainController {
 
     @FXML
     void handle_quit_action(ActionEvent event) {
+        System.exit(0);
 
     }
 
@@ -183,6 +186,7 @@ public class MainController {
             System.out.println("Rows" + rows + "   " + "Columns" + columns);
             world = new World(rows, columns);
             world_view.setText(world.toString());
+            right_status.setText("World drawn!");
         } catch (NumberFormatException | NullPointerException e) {
             if (row_input.getText().isEmpty()) {
                 left_status.setText("Enter number of rows for creating a world!");
@@ -227,9 +231,14 @@ public class MainController {
 
                         if (mon_row >= 0 && mon_row < Integer.parseInt(row_input.getText()) && mon_col >= 0 && mon_col < Integer.parseInt(column_input.getText())) {
                             Monster monster = new Monster(mon_health, mon_symbol, WeaponType.getWeaponType(weapon));
-                            world.addEntity(mon_row, mon_col, monster);
-                            left_status.setText("Added a monster!");
-                            world_view.setText(world.toString());
+                            if(world.getEntity(mon_row,mon_col)==null) {
+                                world.addEntity(mon_row, mon_col, monster);
+                                left_status.setText("Added a monster!");
+                                world_view.setText(world.toString());
+                                right_status.setText("Updated world drawn!");
+                            }
+                            else
+                            {left_status.setText("Cannot add a Monster as row and column index is not null!");}
                         } else {
                             if (mon_row < 0 || mon_row >= Integer.parseInt(row_input.getText())) {
                                 left_status.setText("Enter a valid range for row index ");
@@ -244,6 +253,8 @@ public class MainController {
                 left_status.setText("Enter a valid integer input! "+"  "+e);
 
             }
+            catch (NullPointerException e)
+            {left_status.setText(String.valueOf(e));}
         }
         else if (hero_rb.isSelected()) {
             try {
@@ -278,9 +289,14 @@ public class MainController {
 
                         if (hero_row >= 0 && hero_row < Integer.parseInt(row_input.getText()) && hero_col >= 0 && hero_col < Integer.parseInt(column_input.getText())) {
                             Hero hero = new Hero(hero_health, hero_symbol, hero_Weapon, hero_armor);
-                            world.addEntity(hero_row, hero_col, hero);
-                            left_status.setText("Added a Hero!");
-                            world_view.setText(world.toString());
+                            if(world.getEntity(hero_row,hero_col)==null) {
+                                world.addEntity(hero_row, hero_col, hero);
+                                left_status.setText("Added a Hero!");
+                                world_view.setText(world.toString());
+                                right_status.setText("Updated world drawn!");
+                            }
+                            else
+                            {left_status.setText("Cannot add a hero as the row and column location is not null!");}
                         } else {
                             if (hero_row < 0 || hero_row >= Integer.parseInt(row_input.getText())) {
                                 left_status.setText("Enter a valid range for row index ");
@@ -298,6 +314,8 @@ public class MainController {
             {
                 left_status.setText("Enter a valid integer input! "+" "+ e);
             }
+            catch (NullPointerException e)
+            {left_status.setText(String.valueOf(e));}
         }
 
     }
@@ -320,10 +338,18 @@ public class MainController {
                     {
                         int row = Integer.parseInt(row_location.getText());
                         int column = Integer.parseInt(column_location.getText());
-                        world.addEntity(row, column, null);
-                        left_status.setText("Deleted an entity!");
-                        world_view.setText(world.toString());
+                        if(world.getEntity(row,column)!=null) {
+                            world.addEntity(row, column, null);
+                            left_status.setText("Deleted an entity!");
+                            world_view.setText(world.toString());
+                            right_status.setText("Updated world drawn!");
+                        }
+                        else {
+                            left_status.setText("Cannot delete an entity as it is null!");
+                        }
+                        }
                     }
+
 
                     else if (Integer.parseInt(row_location.getText()) < 0 || Integer.parseInt(row_location.getText()) >= Integer.parseInt(row_input.getText())) {
                         left_status.setText("Enter row index within a valid range!");
@@ -332,63 +358,69 @@ public class MainController {
                         left_status.setText("Enter column index within a valid range");
                     }
                 }
-            }
+
 
 
         } catch (NumberFormatException e) {
             left_status.setText("Enter a valid integer input! "+" "+e);
         }
+        catch (NullPointerException e)
+        {left_status.setText(String.valueOf(e));}
     }
     @FXML
     void view_entity_detail(MouseEvent event) {
-        try
-        {
-        if(view_row_textfield.getText().isEmpty())
-        {
-            left_status.setText("Enter the row index of an entity to view details!");
-        }
-        if(view_column_textfield.getText().isEmpty())
-        {
-            left_status.setText("Enter the column index of an entity to view details!");
-        }
+        try {
+            if (world == null) {
+                left_status.setText("Create a world by entering rows and columns and then click create world button");
+            } else {
+                if (view_row_textfield.getText().isEmpty()) {
+                    left_status.setText("Enter the row index of an entity to view details!");
+                }
+                if (view_column_textfield.getText().isEmpty()) {
+                    left_status.setText("Enter the column index of an entity to view details!");
+                }
+                if (world != null && !view_row_textfield.getText().isEmpty() && !view_column_textfield.getText().isEmpty()) {
+                    int row = Integer.parseInt(view_row_textfield.getText());
+                    int column = Integer.parseInt(view_column_textfield.getText());
+                    world.getEntity(row, column);
+                    if (world.isMonster(row, column)) {
+                        String type = "MONSTER";
+                        char symbol = world.getEntity(row, column).getSymbol();
+                        int health = world.getEntity(row, column).getHealth();
+                        int weapon_strength = world.getEntity(row, column).weaponStrength();
+                        String weapon = "";
+                        if (weapon_strength == 4) {
+                            weapon = "SWORD";
 
-        int row= Integer.parseInt(view_row_textfield.getText());
-        int column= Integer.parseInt(view_column_textfield.getText());
-        world.getEntity(row,column);
-        if(world.isMonster(row,column)) {
-            String type = "MONSTER";
-            char symbol = world.getEntity(row, column).getSymbol();
-            int health=world.getEntity(row,column).getHealth();
-            int weapon_strength=world.getEntity(row,column).weaponStrength();
-            String weapon="";
-            if(weapon_strength==4)
-            {
-                weapon="SWORD";
+                        } else if (weapon_strength == 3) {
+                            weapon = "AXE";
+                        } else if (weapon_strength == 2) {
+                            weapon = "CLUB";
+                        }
+                        details_view.setText("Type: " + type + "\n" + "Symbol: " + symbol + "\n" + "Health: " + health + "\n" + "Weapon: " + weapon + "\n" + "Weapon strength: " + weapon_strength);
+                        right_status.setText("Details of a monster!");
+                    } else if (world.isHero(row, column)) {
+                        String type = "HERO";
+                        char symbol = world.getEntity(row, column).getSymbol();
+                        int health = world.getEntity(row, column).getHealth();
+                        int weapon = world.getEntity(row, column).weaponStrength();
+                        int armor = world.getEntity(row, column).armorStrength();
+                        details_view.setText("Type: " + type + "\n" + "Symbol: " + symbol + "\n" + "Health: " + health + "\n" + "Weapon Strength: " + weapon + "\n" + "Armor Strength: " + armor);
+                        right_status.setText("Details of a hero!");
+                    } else if (world.getEntity(row, column) == null) {
+                        right_status.setText("Cannot access details of an entity as it is null!");
+                    }
+                }
 
             }
-            else if(weapon_strength==3)
-            {
-                weapon="AXE";
-            }
-            else if(weapon_strength==2)
-            {
-                weapon="CLUB";
-            }
-            details_view.setText("Type: " + type + "\n" +"Symbol: "+ symbol+"\n"+"Health: "+ health+"\n"+"Weapon: "+ weapon+"\n"+"Weapon strength: "+ weapon_strength);
         }
-        else if(world.isHero(row,column))
-        {
-            String type = "HERO";
-            char symbol = world.getEntity(row, column).getSymbol();
-            int health=world.getEntity(row,column).getHealth();
-            int weapon=world.getEntity(row,column).weaponStrength();
-            int armor=world.getEntity(row,column).armorStrength();
-            details_view.setText("Type: " + type + "\n" +"Symbol: "+ symbol+"\n"+"Health: "+ health+"\n"+"Weapon Strength: "+weapon+"\n"+"Armor Strength: "+armor);
-        }
-    }
         catch(NumberFormatException e)
         {
-            left_status.setText("Enter a valid integer input! "+" '+e");
+            left_status.setText("Enter a valid integer input! "+" "+ e );
+        }
+        catch (NullPointerException e)
+        {
+            left_status.setText(String.valueOf(e));
         }
 }
 
