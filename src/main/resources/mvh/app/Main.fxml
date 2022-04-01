@@ -20,6 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvh.app.MainController">
     <children>
@@ -91,11 +92,29 @@
                   <Label layoutX="172.0" layoutY="165.0" text="Column" />
                   <TextField fx:id="monster_row_textfield" layoutX="137.0" layoutY="184.0" prefHeight="25.0" prefWidth="28.0" />
                   <TextField fx:id="monster_column_textfield" layoutX="181.0" layoutY="184.0" prefHeight="25.0" prefWidth="28.0" />
-                  <RadioButton fx:id="monster_rb" layoutX="135.0" layoutY="222.0" mnemonicParsing="false" onMouseClicked="#RadioSelect" text="Add Monster">
+                  <RadioButton fx:id="monster_rb" layoutX="126.0" layoutY="222.0" mnemonicParsing="false" onMouseClicked="#RadioSelect" text="Add Monster">
                      <toggleGroup>
                         <ToggleGroup fx:id="entity" />
                      </toggleGroup>
                   </RadioButton>
+                  <Label layoutX="28.0" layoutY="258.0" text="HERO">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="14.0" layoutY="288.0" text="Symbol" />
+                  <TextField fx:id="hero_symbol_textfield" layoutX="70.0" layoutY="284.0" prefHeight="17.0" prefWidth="35.0" />
+                  <Label layoutX="14.0" layoutY="318.0" text="Health" />
+                  <TextField fx:id="hero_health_textfield" layoutX="70.0" layoutY="314.0" prefHeight="20.0" prefWidth="35.0" />
+                  <Label layoutX="12.0" layoutY="347.0" text="Weapon" />
+                  <TextField fx:id="hero_weapon_textfield" layoutX="71.0" layoutY="343.0" prefHeight="25.0" prefWidth="35.0" />
+                  <Label layoutX="17.0" layoutY="377.0" text="Armor" />
+                  <TextField fx:id="hero_armor_textfield" layoutX="71.0" layoutY="373.0" prefHeight="25.0" prefWidth="35.0" />
+                  <Text layoutX="139.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Row" />
+                  <TextField fx:id="hero_row_textfield" layoutX="137.0" layoutY="343.0" prefHeight="25.0" prefWidth="28.0" />
+                  <TextField fx:id="hero_column_textfield" layoutX="181.0" layoutY="343.0" prefHeight="25.0" prefWidth="28.0" />
+                  <Label layoutX="179.0" layoutY="318.0" text="Column" />
+                  <RadioButton fx:id="hero_rb" layoutX="129.0" layoutY="377.0" mnemonicParsing="false" onMouseClicked="#RadioSelect" text="Add Hero" toggleGroup="$entity" />
                     </children>
                 </AnchorPane>
                 <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
