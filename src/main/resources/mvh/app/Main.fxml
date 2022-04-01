@@ -29,7 +29,7 @@
                     <items>
                         <MenuItem fx:id="load" mnemonicParsing="false" onAction="#handle_load_action" text="Load" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="save" mnemonicParsing="false" onAction="#handle_save_action" text="Save" />
+                        <MenuItem fx:id="save" mnemonicParsing="false" onAction="#handle_save_action" text=" Save As" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="quit" mnemonicParsing="false" onAction="#handle_quit_action" text="Quit" />
                     </items>
@@ -115,7 +115,7 @@
                   <Button fx:id="details" layoutX="134.0" layoutY="509.0" mnemonicParsing="false" onMouseClicked="#view_entity_detail" text="View Detail" />
                     </children>
                 </AnchorPane>
-                <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
+                <ScrollPane prefHeight="550.0" prefWidth="347.0">
                     <content>
                         <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="341.0">
                             <children>
@@ -132,7 +132,7 @@
                 <AnchorPane>
                     <children>
                         <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" wrapText="false" />
-                  <TextArea fx:id="details_view" layoutX="21.0" layoutY="44.0" prefHeight="200.0" prefWidth="200.0" />
+                  <TextArea fx:id="details_view" layoutX="21.0" layoutY="44.0" prefHeight="200.0" prefWidth="178.0" />
                     </children>
                 </AnchorPane>
             </items>

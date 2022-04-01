@@ -122,7 +122,7 @@ public class MainController {
 
     @FXML
     void handle_quit_action(ActionEvent event) {
-        System.exit(0);
+        javafx.application.Platform.exit();
 
     }
 
@@ -162,6 +162,13 @@ public class MainController {
                 print_writer.flush();
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            catch(NullPointerException| NumberFormatException e)
+            {
+                if(row_input.getText().isEmpty() || column_input.getText().isEmpty())
+                   left_status.setText("World is empty!");
+                else
+                    left_status.setText("Enter a valid integer input "+ e);
             }
         }
         else
