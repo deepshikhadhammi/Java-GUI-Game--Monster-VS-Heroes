@@ -41,5 +41,5 @@ For viewing details of an Entity user should enter the row and column index o th
 In order to run a jar file user should open cmd and then enter the module path and add modules.
  For example:
 java --module-path "C:\Program Files\Java\javafx-sdk-17.0.2\lib" --add-modules
-javafx.controls,javafx.fxml -jar Assignment3CPSC233W22.jar
+javafx.controls,javafx.fxml -jar CPSC233W22ASSIGNMENT3.jar
   
